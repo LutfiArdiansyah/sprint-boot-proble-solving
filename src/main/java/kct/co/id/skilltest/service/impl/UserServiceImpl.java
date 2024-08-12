@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -36,14 +37,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public BaseResponse<UserDTO> getById(UUID id) throws Exception {
+        User user = userRepository.getReferenceById(Long.valueOf(id.toString()));
+        UserDTO userDTO = OBJECT_MAPPER.convertValue(user, UserDTO.class);
+        return BaseResponse
+                .<UserDTO>builder()
+                .success(true)
+                .message("Get user")
+                .data(userDTO)
+                .build();
+    }
+
+    @Override
     public BaseResponse<UserDTO> post(UserPayload userPayload) throws Exception {
         User user = new User();
         Address address = new Address();
         BeanUtils.copyProperties(userPayload, user);
         BeanUtils.copyProperties(userPayload.getAddress(), address);
-        if (!user.getAddress().equals(address)) {
-            user.setAddress(address);
-        }
+        user.setAddress(address);
         user = userRepository.save(user);
         UserDTO userDTO = OBJECT_MAPPER.convertValue(user, UserDTO.class);
         return BaseResponse

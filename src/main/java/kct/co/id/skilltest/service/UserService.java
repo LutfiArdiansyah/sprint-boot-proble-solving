@@ -5,9 +5,12 @@ import kct.co.id.skilltest.model.BaseResponse;
 import kct.co.id.skilltest.model.UserPayload;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
     BaseResponse<List<UserDTO>> get() throws Exception;
+
+    BaseResponse<UserDTO> getById(UUID id) throws Exception;
 
     BaseResponse<UserDTO> post(UserPayload userPayload) throws Exception;
 

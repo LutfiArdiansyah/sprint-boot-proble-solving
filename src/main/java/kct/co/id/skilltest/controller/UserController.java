@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -19,6 +20,11 @@ public class UserController {
     @GetMapping
     public BaseResponse<List<UserDTO>> get() throws Exception {
         return userService.get();
+    }
+
+    @GetMapping("/{guid}")
+    public BaseResponse<UserDTO> getById(@PathVariable("id") UUID id) throws Exception {
+        return userService.getById(id);
     }
 
     @PostMapping
