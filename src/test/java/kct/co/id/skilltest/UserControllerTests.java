@@ -117,6 +117,24 @@ public class UserControllerTests {
         Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
+    @Test
+    public void getById() throws Exception {
+        User user = createInvalidUser();
+
+        String BASE_URL = String.format("http://localhost:%s/users/%s", port, user.getId());
+
+        ResponseEntity<String> response = restTemplate
+                .getForEntity(
+                        BASE_URL,
+                        String.class
+                );
+        User userResponse = OBJECT_MAPPER.readValue(response.getBody(), User.class);
+        Assertions.assertAll("Get By Id",
+                () -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode(), "HTTP Status code must be 200 ok"),
+                () -> Assertions.assertEquals(user.getId(), userResponse.getId(), "ID must be same")
+        );
+    }
+
 //    @Test
     public void delete() {
         User user = createInvalidUser();
