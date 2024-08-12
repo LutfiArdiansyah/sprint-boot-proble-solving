@@ -41,7 +41,9 @@ public class UserServiceImpl implements UserService {
         Address address = new Address();
         BeanUtils.copyProperties(userPayload, user);
         BeanUtils.copyProperties(userPayload.getAddress(), address);
-        user.setAddress(address);
+        if (!user.getAddress().equals(address)) {
+            user.setAddress(address);
+        }
         user = userRepository.save(user);
         UserDTO userDTO = OBJECT_MAPPER.convertValue(user, UserDTO.class);
         return BaseResponse
